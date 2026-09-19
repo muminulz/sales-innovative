@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@property --lead-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes lead-border-rotation {
+  to {
+    --lead-border-angle: 360deg;
+  }
+}
+
+.animated-lead-border {
+  position: relative !important;
+  isolation: isolate;
+  overflow: visible !important;
+  border: 2px solid transparent !important;
+  background:
+    linear-gradient(#0a0c0b, #0a0c0b) padding-box,
+    conic-gradient(
+      from var(--lead-border-angle),
+      #20f477 0deg,
+      #00d9ff 72deg,
+      #286cff 145deg,
+      #ff315d 220deg,
+      #ffcf33 290deg,
+      #20f477 360deg
+    ) border-box !important;
+  animation: lead-border-rotation 5s linear infinite !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.03) !important;
+}
+
+.animated-lead-border:focus-within {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 3px rgba(32, 244, 119, 0.12),
+    0 0 35px rgba(0, 217, 255, 0.14) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background: #252830;
+  border-radius: 12px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #363c47;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

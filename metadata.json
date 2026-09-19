@@ -1,0 +1,6 @@
+{
+  "name": "Private Call Workspace & Sales CRM",
+  "description": "Private lead operations workspace with automatic contact extraction, one-click dialing, follow-up tracking, course catalog, and full sales CRM.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
