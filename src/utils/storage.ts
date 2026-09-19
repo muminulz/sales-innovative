@@ -114,6 +114,20 @@ export function loadCrmDb(): CrmDatabase {
           settings: { ...base.settings, ...(parsed.settings || {}) },
         };
 
+        // Strip any demo or placeholder records from previous test versions
+        db.leads = (Array.isArray(parsed.leads) ? parsed.leads : []).filter(
+          (l: Lead) => l && l.name !== 'Rahim Ahmed' && l.phone !== '+8801712345678'
+        );
+        db.followups = (Array.isArray(parsed.followups) ? parsed.followups : []).filter(
+          (f: FollowUp) => f && !f.note?.includes('Rahim') && !f.note?.includes('Backend AI Bootcamp')
+        );
+        db.tasks = (Array.isArray(parsed.tasks) ? parsed.tasks : []).filter(
+          (t: Task) => t && !t.title?.includes('Review today’s leads and follow-ups')
+        );
+        db.activity = (Array.isArray(parsed.activity) ? parsed.activity : []).filter(
+          (a: ActivityEntry) => a && !a.text?.includes('sample pipeline record')
+        );
+
         // Normalize leads
         db.leads.forEach((l) => {
           l.stage = normalizeStage(l.stage);
@@ -132,59 +146,10 @@ export function loadCrmDb(): CrmDatabase {
     console.error('Failed to load CRM data', e);
   }
 
-  // If completely empty, provide an initial welcoming lead
-  const initial = blankDb();
-  initial.leads = [
-    {
-      id: uid(),
-      name: 'Rahim Ahmed',
-      phone: '+8801712345678',
-      email: 'rahim.ahmed@example.com',
-      course: 'Backend AI Development Bootcamp (Online)',
-      courseMode: 'Online',
-      stage: 'interested',
-      total: 18000,
-      paid: 5000,
-      due: 13000,
-      value: 18000,
-      contactDate: todayIso(),
-      nextFollowUp: todayIso(),
-      followupType: 'Call',
-      source: 'Facebook Campaign',
-      notes: 'Interested in backend AI and FastAPI. Requested curriculum details.',
-      createdAt: new Date().toISOString(),
-    },
-  ];
-  initial.followups = [
-    {
-      id: uid(),
-      leadId: initial.leads[0].id,
-      date: todayIso(),
-      type: 'Call',
-      note: 'Call regarding installment payment for Backend AI Bootcamp',
-      done: false,
-      createdAt: new Date().toISOString(),
-    },
-  ];
-  initial.tasks = [
-    {
-      id: uid(),
-      title: 'Review today’s leads and follow-ups',
-      due: todayIso(),
-      note: 'Check priority queue and make scheduled calls',
-      done: false,
-    },
-  ];
-  initial.activity = [
-    {
-      id: uid(),
-      type: 'system',
-      text: 'Workspace initialized with sample pipeline record',
-      at: new Date().toISOString(),
-    },
-  ];
-  saveCrmDb(initial);
-  return initial;
+  // Purely workable, clean database with NO demo data
+  const freshDb = blankDb();
+  saveCrmDb(freshDb);
+  return freshDb;
 }
 
 export function saveCrmDb(db: CrmDatabase): void {

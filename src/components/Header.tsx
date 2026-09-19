@@ -1,5 +1,5 @@
 import React from 'react';
-import { PhoneCall, Copy, Save, Trash2, ArrowDown } from 'lucide-react';
+import { PhoneCall, Copy, Save, Eraser, ArrowDown } from 'lucide-react';
 
 interface HeaderProps {
   hasPhone: boolean;
@@ -7,7 +7,8 @@ interface HeaderProps {
   onMakeCall: () => void;
   onCopyAll: () => void;
   onSaveLead: () => void;
-  onReset: () => void;
+  onClear?: () => void;
+  onReset?: () => void;
   onScrollToCrm: () => void;
 }
 
@@ -16,9 +17,12 @@ export const Header: React.FC<HeaderProps> = ({
   onMakeCall,
   onCopyAll,
   onSaveLead,
+  onClear,
   onReset,
   onScrollToCrm,
 }) => {
+  const handleClear = onClear || onReset || (() => {});
+
   return (
     <header className="h-[60px] mb-5 px-3 py-2 border border-white/10 rounded-2xl bg-[#090b0a]/85 backdrop-blur-xl shadow-xl flex items-center justify-between gap-3">
       <div className="flex items-center gap-3">
@@ -70,14 +74,15 @@ export const Header: React.FC<HeaderProps> = ({
 
         <span className="w-px h-5 bg-white/10 mx-0.5" />
 
+        {/* Clear on top replaces Reset button */}
         <button
           type="button"
-          onClick={onReset}
-          className="h-9 px-2.5 sm:px-3 rounded-lg text-[11px] font-semibold text-zinc-400 hover:text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-colors flex items-center gap-1.5 cursor-pointer"
-          title="Clear workspace"
+          onClick={handleClear}
+          className="h-9 px-3 rounded-lg text-xs font-semibold text-rose-300 hover:text-rose-200 bg-rose-950/40 hover:bg-rose-900/50 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+          title="Clear workspace text, active lead & form"
         >
-          <Trash2 className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Reset</span>
+          <Eraser className="w-3.5 h-3.5 text-rose-400" />
+          <span>Clear</span>
         </button>
       </div>
     </header>

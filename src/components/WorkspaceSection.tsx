@@ -28,6 +28,7 @@ import { Lead, ExtractedContact, MentorMeeting, StageId } from '../types';
 import { COURSES } from '../data/courses';
 import { MENTORS } from '../data/mentors';
 import { STAGES, stageLabel, todayIso } from '../utils/storage';
+import { TeacherSearchSelect } from './common/TeacherSearchSelect';
 
 export type WorkspaceViewMode = 'all' | 'raw' | 'details' | 'call' | 'followup' | 'payment';
 
@@ -898,23 +899,13 @@ export const WorkspaceSection: React.FC<WorkspaceSectionProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {/* Select Mentor */}
-                <div>
-                  <label className="block text-[10px] font-bold uppercase text-zinc-400 mb-1">
-                    Select Faculty Mentor (15 Mentors)
-                  </label>
-                  <select
-                    value={mentorName}
-                    onChange={(e) => setMentorName(e.target.value)}
-                    className="w-full h-9 px-3 rounded-lg bg-black/40 border border-white/10 focus:border-emerald-500/50 text-zinc-100 text-xs outline-none cursor-pointer"
-                  >
-                    {MENTORS.map((m, idx) => (
-                      <option key={`${m.name}-${idx}`} value={m.name}>
-                        {m.name} ({m.affiliation || m.title.slice(0, 30)})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {/* Select Mentor / Teacher (Searchable) */}
+                <TeacherSearchSelect
+                  value={mentorName}
+                  onChange={(name) => setMentorName(name)}
+                  label="Teacher / Mentor Search"
+                  required
+                />
 
                 {/* Meeting Date & Time */}
                 <div>

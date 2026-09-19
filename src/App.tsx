@@ -124,6 +124,8 @@ export default function App() {
 
   const handleClear = () => {
     setRawText('');
+    setActiveWorkspaceLead(null);
+    setWorkspaceViewMode('all');
     showToast('Workspace cleared');
   };
 
@@ -748,16 +750,56 @@ export default function App() {
     showToast('Meeting deleted');
   };
 
+  const handleAddFollowup = (data: {
+    leadId: string;
+    date: string;
+    time?: string;
+    type: string;
+    note: string;
+  }) => {
+    const newFollowup = {
+      id: uid(),
+      leadId: data.leadId,
+      date: data.date,
+      time: data.time,
+      type: data.type,
+      note: data.note,
+      done: false,
+      createdAt: new Date().toISOString(),
+    };
+    updateDb((prev) => ({
+      ...prev,
+      followups: [newFollowup, ...prev.followups],
+      leads: prev.leads.map((l) =>
+        l.id === data.leadId
+          ? {
+              ...l,
+              nextFollowUp: data.date,
+              nextFollowUpTime: data.time,
+              followupType: data.type,
+            }
+          : l
+      ),
+    }));
+    logActivity(
+      'followup',
+      `Scheduled follow-up (${data.type}) on ${data.date} ${data.time || ''}: ${data.note || 'No note'}`,
+      data.leadId
+    );
+    showToast('Follow-up scheduled with date & time');
+  };
+
   return (
     <div className="min-h-screen bg-[#050607] text-[#f4f5f6] pb-16 font-sans">
       <div className="max-w-[1140px] mx-auto px-3 sm:px-5 pt-3 sm:pt-4">
-        {/* Top App Header */}
+        {/* Top App Header with Clear button on top replacing reset */}
         <Header
           hasPhone={Boolean(extracted.phone)}
           hasEmail={Boolean(extracted.email)}
           onMakeCall={() => makeCallToNumber(extracted.phone, extracted.name)}
           onCopyAll={copyContactBundle}
           onSaveLead={saveExtractedLeadToCrm}
+          onClear={handleClear}
           onReset={handleClear}
           onScrollToCrm={scrollToCrm}
         />
@@ -902,6 +944,7 @@ export default function App() {
                     handleNewLeadInWorkspace();
                   }
                 }}
+                onAddFollowup={handleAddFollowup}
               />
             )}
 

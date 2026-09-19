@@ -28,6 +28,7 @@ export interface Lead {
   contactDate?: string;
   purchaseDate?: string;
   nextFollowUp?: string;
+  nextFollowUpTime?: string;
   followupType?: string;
   source?: string;
   occupation?: string;
@@ -70,6 +71,7 @@ export interface FollowUp {
   id: string;
   leadId: string;
   date: string;
+  time?: string;
   type?: string;
   note?: string;
   done: boolean;
@@ -90,6 +92,7 @@ export interface Task {
   id: string;
   title: string;
   due?: string;
+  dueTime?: string;
   note?: string;
   done: boolean;
 }

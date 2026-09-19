@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { MENTORS } from '../../data/mentors';
 import { Mentor, MentorMeeting, Lead } from '../../types';
+import { TeacherSearchSelect } from '../common/TeacherSearchSelect';
 
 interface MentorsTabProps {
   meetings: MentorMeeting[];
@@ -514,25 +515,13 @@ export const MentorsTab: React.FC<MentorsTabProps> = ({
             <form onSubmit={handleSave} className="space-y-4">
               {/* Dual Selection: Lead & Mentor */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-black/30 border border-white/10">
-                {/* 1. SELECT MENTOR */}
-                <div>
-                  <label className="block text-[10px] font-bold uppercase text-emerald-400 mb-1 flex items-center gap-1">
-                    <span>1. Select Mentor</span>
-                    <span className="text-rose-400">*</span>
-                  </label>
-                  <select
-                    required
-                    value={selectedMentorName}
-                    onChange={(e) => setSelectedMentorName(e.target.value)}
-                    className="w-full h-9 px-2.5 rounded-lg bg-[#080a0c] border border-white/10 text-xs text-zinc-200 font-semibold outline-none focus:border-emerald-500/50"
-                  >
-                    {MENTORS.map((m) => (
-                      <option key={m.name} value={m.name}>
-                        {m.name} ({m.affiliation})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {/* 1. SELECT MENTOR / TEACHER (Searchable) */}
+                <TeacherSearchSelect
+                  value={selectedMentorName}
+                  onChange={(name) => setSelectedMentorName(name)}
+                  label="1. Search & Select Mentor / Teacher"
+                  required
+                />
 
                 {/* 2. SELECT LEAD */}
                 <div>
