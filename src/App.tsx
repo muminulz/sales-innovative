@@ -858,11 +858,16 @@ export default function App() {
                 S
               </div>
               <div>
-                <h1 className="text-sm font-bold text-zinc-100">
-                  Sales Command Center
-                </h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-sm font-bold text-zinc-100">
+                    CallRM — Sales Command Center
+                  </h1>
+                  <span className="px-1.5 py-0.2 text-[9px] font-bold uppercase rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
+                    Innovative Zihad
+                  </span>
+                </div>
                 <p className="text-[10px] text-zinc-400">
-                  Local CRM · Connected lead workspace, dialer, follow-ups, and catalog.
+                  Connected lead workspace, dialer, follow-ups, mentor scheduling & catalog.
                 </p>
               </div>
             </div>

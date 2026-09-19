@@ -154,6 +154,29 @@ export const WorkspaceSection: React.FC<WorkspaceSectionProps> = ({
   const hasEmail = Boolean(effectiveEmail);
   const calculatedDue = Math.max(0, Number(draftTotal || 0) - Number(draftPaid || 0));
 
+  // Determine if a lead is currently active / being edited
+  const editingLeadName =
+    activeLead?.name ||
+    activeLead?.phone ||
+    (text.trim() && effectiveName ? effectiveName : null);
+
+  const handleRemoveEditing = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (onClearActiveLead) {
+      onClearActiveLead();
+    }
+    if (onClear) {
+      onClear();
+    }
+    setDraftName('');
+    setDraftPhone('');
+    setDraftEmail('');
+    setDraftCourse('');
+    setDraftNotes('');
+    setDraftTotal(0);
+    setDraftPaid(0);
+  };
+
   // Filtered courses for selector
   const filteredCourses = useMemo(() => {
     if (!courseSearch) return COURSES;
@@ -298,19 +321,17 @@ export const WorkspaceSection: React.FC<WorkspaceSectionProps> = ({
               <span>Lead Workspace</span>
             </div>
 
-            {activeLead ? (
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Editing: {activeLead.name || activeLead.phone}</span>
-                <button
-                  type="button"
-                  onClick={onClearActiveLead}
-                  title="Close active lead and start new"
-                  className="hover:text-white ml-1 cursor-pointer"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
+            {editingLeadName ? (
+              <button
+                type="button"
+                onClick={handleRemoveEditing}
+                title="Click to remove editing"
+                className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 hover:bg-rose-500/15 text-emerald-300 hover:text-rose-300 border border-emerald-500/30 hover:border-rose-500/30 transition-all cursor-pointer group shadow-sm active:scale-95"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover:bg-rose-400 animate-pulse shrink-0" />
+                <span>Editing: {editingLeadName}</span>
+                <X className="w-3 h-3 ml-0.5 text-emerald-400/80 group-hover:text-rose-300 transition-colors shrink-0" />
+              </button>
             ) : (
               <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
                 Auto Extract Active
